@@ -1,8 +1,14 @@
 package clubs.mobile.radford.clubmobile;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.SearchView;
 
 import java.util.List;
 
@@ -16,29 +22,60 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DashboardActivity extends NavigationDrawerActivity implements Callback<List<Club>> {
+public class FindClubActivity extends NavigationDrawerActivity implements SearchView.OnQueryTextListener, Callback<List<Club>> {
     private RecyclerView clubRecyclerView;
-    private RecyclerView.Adapter clubAdapter;
+    private ClubAdapter clubAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     @Override
     public int layoutId() {
-        return R.layout.activity_dashboard;
+        return R.layout.activity_find_club;
     }
 
     @Override
     public String title() {
-        return "My Clubs";
+        return "Find clubs";
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        clubRecyclerView = findViewById(R.id.club_recycler_view);
+
+        clubRecyclerView = findViewById(R.id.find_club_recycler_view);
 
         ClubService clubService = ClubServiceProvider.getService();
 
-        clubService.getClubs(UserManager.getSessionId()).enqueue(this);
+        clubService.getAllClubs(UserManager.getSessionId()).enqueue(this);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        SearchManager searchManager = (SearchManager)
+                getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchMenuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.
+                getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        clubAdapter.getFilter().filter(newText);
+        return true;
     }
 
     @Override

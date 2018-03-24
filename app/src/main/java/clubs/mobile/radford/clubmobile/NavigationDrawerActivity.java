@@ -1,21 +1,28 @@
 package clubs.mobile.radford.clubmobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public abstract class NavigationDrawerActivity extends ToolbarActivity
+public abstract class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public abstract int layoutId();
+    public abstract String title();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(layoutId());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(title());
         setSupportActionBar(toolbar);
 
 
@@ -67,10 +74,12 @@ public abstract class NavigationDrawerActivity extends ToolbarActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
+        if (id == R.id.nav_my_clubs) {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_find_clubs) {
+            Intent intent = new Intent(this, FindClubActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

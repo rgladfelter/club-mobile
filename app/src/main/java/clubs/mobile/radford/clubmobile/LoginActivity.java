@@ -1,7 +1,6 @@
 package clubs.mobile.radford.clubmobile;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -14,10 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import clubs.mobile.radford.clubmobile.managers.UserManager;
 import clubs.mobile.radford.clubmobile.models.LoginRequest;
 import clubs.mobile.radford.clubmobile.models.LoginResponse;
 import clubs.mobile.radford.clubmobile.networking.ClubService;
 import clubs.mobile.radford.clubmobile.networking.ClubServiceProvider;
+import clubs.mobile.radford.clubmobile.utils.AlertHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -106,22 +107,18 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
     @Override
     public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
         if (response.isSuccessful()) {
-            Intent intent = new Intent(this, NavigationDrawerActivity.class);
+            UserManager.setSessionId(response.body().getSessionId());
+            Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
         } else {
-            showLoginAlert();
+            AlertHelper.makeErrorDialog(this, "Failed to login").show();
         }
     }
 
     @Override
     public void onFailure(Call<LoginResponse> call, Throwable t) {
-        showLoginAlert();
-    }
 
-    private void showLoginAlert() {
-        AlertDialog alert = new AlertDialog.Builder(this).create();
-        alert.setMessage("Failed to login");
-        alert.show();
+        AlertHelper.makeErrorDialog(this, "Failed to login").show();
     }
 }
 
