@@ -3,7 +3,9 @@ package clubs.mobile.radford.clubmobile.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Club {
+import java.io.Serializable;
+
+public class Club implements Serializable {
 
     @SerializedName("id")
     @Expose

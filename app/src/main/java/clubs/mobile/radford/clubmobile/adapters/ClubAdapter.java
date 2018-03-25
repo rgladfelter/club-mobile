@@ -12,17 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import clubs.mobile.radford.clubmobile.R;
+import clubs.mobile.radford.clubmobile.delegates.ItemSelector;
 import clubs.mobile.radford.clubmobile.models.Club;
 
 public class ClubAdapter extends RecyclerView.Adapter<ClubAdapter.ViewHolder> implements Filterable{
     private List<Club> clubs;
     private List<Club> filteredClubs;
     private ClubFilter clubFilter;
+    private ItemSelector<Club> delegate;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ClubAdapter(List<Club> clubs) {
+    public ClubAdapter(List<Club> clubs, ItemSelector<Club> delegate) {
         this.clubs = clubs;
         this.filteredClubs = clubs;
+        this.delegate = delegate;
     }
 
     // Provide a reference to the views for each data item
@@ -52,10 +55,16 @@ public class ClubAdapter extends RecyclerView.Adapter<ClubAdapter.ViewHolder> im
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Club club = filteredClubs.get(position);
+        final Club club = filteredClubs.get(position);
 
         holder.name.setText(club.getName());
         holder.description.setText(club.getDescription());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                delegate.itemSelected(club);
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)

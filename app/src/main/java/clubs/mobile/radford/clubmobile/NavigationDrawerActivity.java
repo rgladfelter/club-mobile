@@ -10,6 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import clubs.mobile.radford.clubmobile.managers.UserManager;
 
 public abstract class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -21,7 +25,10 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layoutId());
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        String name = UserManager.getUserName();
+
         toolbar.setTitle(title());
         setSupportActionBar(toolbar);
 
@@ -33,6 +40,12 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        if(name != null) {
+            View view = navigationView.getHeaderView(0);
+            TextView navName = view.findViewById(R.id.nav_name);
+            navName.setText(name);
+        }
         navigationView.setNavigationItemSelectedListener(this);
     }
 

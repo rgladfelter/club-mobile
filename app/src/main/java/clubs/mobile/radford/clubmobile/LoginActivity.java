@@ -29,7 +29,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity implements Callback<LoginResponse> {
 
     // UI references.
-    private EditText mEmailView;
+    private EditText mUsernameView;
     private EditText mPasswordView;
 
     @Override
@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mEmailView = (EditText) findViewById(R.id.email);
+        mUsernameView = (EditText) findViewById(R.id.username);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -51,8 +51,8 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -68,11 +68,11 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
      */
     private void attemptLogin() {
         // Reset errors.
-        mEmailView.setError(null);
+        mUsernameView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -86,9 +86,9 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        if (TextUtils.isEmpty(username)) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
             cancel = true;
         }
 
@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
             focusView.requestFocus();
         } else {
             ClubService service = ClubServiceProvider.getService();
-            LoginRequest request = new LoginRequest(email, password);
+            LoginRequest request = new LoginRequest(username, password);
             service.login(request).enqueue(this);
 
         }
@@ -108,6 +108,7 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
     public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
         if (response.isSuccessful()) {
             UserManager.setSessionId(response.body().getSessionId());
+            UserManager.setUserName(response.body().getUserName());
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
         } else {
