@@ -97,8 +97,8 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
             UserManager.setSessionId(null);
             UserManager.setUser(null);
-            finish();
         }
+        finish();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
