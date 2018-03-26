@@ -1,0 +1,42 @@
+ {
+  "project_info": {
+    "project_number": "599891827661",
+    "firebase_url": "https://radford-clubs.firebaseio.com",
+    "project_id": "radford-clubs",
+    "storage_bucket": "radford-clubs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599891827661:android:2f009c2af417c609",
+        "android_client_info": {
+          "package_name": "com.radford.clubmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "599891827661-3ofad6o93v5q43iqvgng9cchlfrfktuv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3yQ5CDEQoHix0ar2P18uofip9-l9zsSs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
