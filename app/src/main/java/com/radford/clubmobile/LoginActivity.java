@@ -124,12 +124,10 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
             UserManager.setSessionId(response.body().getSessionId());
             UserManager.setUser(response.body().getUser());
 
-            mUsernameView.setText("");
-            mPasswordView.setText("");
-            mUsernameView.requestFocus();
-
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
+
+            finish();
         } else {
             AlertHelper.makeErrorDialog(this, "Failed to login").show();
         }

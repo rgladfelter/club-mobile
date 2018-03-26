@@ -97,6 +97,9 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
             UserManager.setSessionId(null);
             UserManager.setUser(null);
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
         finish();
 
