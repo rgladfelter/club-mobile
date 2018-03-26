@@ -26,4 +26,7 @@
     <string name="register">Register</string>
     <string name="last_name">Last name</string>
     <string name="first_name">First name</string>
+    <string name="my_clubs">My clubs</string>
+    <string name="find_club">Find club</string>
+    <string name="logout">Logout</string>
 </resources>

@@ -36,8 +36,8 @@ public class ClubAdapter extends RecyclerView.Adapter<ClubAdapter.ViewHolder> im
         public TextView name, description;
         public ViewHolder(View v) {
             super(v);
-            name = (TextView) v.findViewById(R.id.club_name);
-            description = (TextView) v.findViewById(R.id.club_description);
+            name = v.findViewById(R.id.club_name);
+            description = v.findViewById(R.id.club_description);
         }
     }
 

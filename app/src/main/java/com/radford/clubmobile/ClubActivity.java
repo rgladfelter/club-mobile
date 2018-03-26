@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.radford.clubmobile.managers.UserManager;
 import com.radford.clubmobile.models.Club;
@@ -33,6 +34,8 @@ public class ClubActivity extends ToolbarActivity implements Callback<Void> {
         super.onCreate(savedInstanceState);
 
         club = (Club) getIntent().getSerializableExtra("club");
+        TextView clubDescription = findViewById(R.id.club_description);
+        clubDescription.setText(club.getDescription());
     }
 
     @Override

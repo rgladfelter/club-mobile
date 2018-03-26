@@ -49,10 +49,10 @@ public class RegistrationActivity extends ToolbarActivity implements Callback<Vo
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set up the login form.
-        mUsernameView = (EditText) findViewById(R.id.username);
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mFirstNameView = (EditText) findViewById(R.id.firstName);
-        mLastNameView = (EditText) findViewById(R.id.lastName);
+        mUsernameView =  findViewById(R.id.username);
+        mPasswordView = findViewById(R.id.password);
+        mFirstNameView = findViewById(R.id.firstName);
+        mLastNameView = findViewById(R.id.lastName);
 
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -66,7 +66,7 @@ public class RegistrationActivity extends ToolbarActivity implements Callback<Vo
             }
         });
 
-        Button mRegisterButton = (Button) findViewById(R.id.register_button);
+        Button mRegisterButton = findViewById(R.id.register_button);
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

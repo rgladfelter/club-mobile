@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
             }
         });
 
-        Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        Button mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
             }
         });
 
-        Button mRegisterButton = (Button) findViewById(R.id.register_button);
+        Button mRegisterButton = findViewById(R.id.register_button);
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +123,11 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
         if (response.isSuccessful()) {
             UserManager.setSessionId(response.body().getSessionId());
             UserManager.setUser(response.body().getUser());
+
+            mUsernameView.setText("");
+            mPasswordView.setText("");
+            mUsernameView.requestFocus();
+
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
         } else {
