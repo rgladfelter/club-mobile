@@ -3,6 +3,8 @@ package com.radford.clubmobile;
 import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.radford.clubmobile.managers.UserManager;
+import com.radford.clubmobile.models.User;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = "MyFirebaseIIDService";
@@ -31,6 +33,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+        if(UserManager.getUser() != null) {
+            //Call user service
+        }
     }
 }
