@@ -1,11 +1,11 @@
 package com.radford.clubmobile.models;
 
 public class LoginRequest {
-    final String username;
+    final String email;
     final String password;
 
-    public LoginRequest(String username, String password) {
-        this.username = username;
+    public LoginRequest(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 }

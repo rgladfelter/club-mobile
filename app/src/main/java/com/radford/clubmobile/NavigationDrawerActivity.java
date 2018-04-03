@@ -1,6 +1,7 @@
 package com.radford.clubmobile;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,8 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.radford.clubmobile.managers.UserManager;
 import com.radford.clubmobile.models.User;
 
@@ -46,6 +50,14 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
             View view = navigationView.getHeaderView(0);
             TextView navName = view.findViewById(R.id.nav_name);
             navName.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
+
+            if(user.getAvatarUrl() != null) {
+                ImageView navImage = view.findViewById(R.id.nav_image);
+                Glide.with(this)
+                        .load(Uri.parse(Constants.BaseUrl + "/static/images/" + user.getAvatarUrl()))
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(navImage);
+            }
         }
         navigationView.setNavigationItemSelectedListener(this);
     }

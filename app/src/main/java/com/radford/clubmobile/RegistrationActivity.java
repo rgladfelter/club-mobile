@@ -1,24 +1,26 @@
 package com.radford.clubmobile;
 
 import android.content.Intent;
-
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.radford.clubmobile.managers.UserManager;
-import com.radford.clubmobile.models.LoginRequest;
-import com.radford.clubmobile.models.LoginResponse;
+import com.bumptech.glide.Glide;
 import com.radford.clubmobile.models.RegistrationRequest;
 import com.radford.clubmobile.networking.ClubService;
 import com.radford.clubmobile.networking.ClubServiceProvider;
 import com.radford.clubmobile.utils.AlertHelper;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,10 +32,12 @@ import retrofit2.Response;
 public class RegistrationActivity extends ToolbarActivity implements Callback<Void> {
 
     // UI references.
-    private EditText mUsernameView;
+    private EditText mEmailView;
     private EditText mPasswordView;
     private EditText mFirstNameView;
     private EditText mLastNameView;
+    private ImageView imageView;
+    private Uri imageUri;
 
     @Override
     public int layoutId() {
@@ -48,11 +52,12 @@ public class RegistrationActivity extends ToolbarActivity implements Callback<Vo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Set up the login form.
-        mUsernameView =  findViewById(R.id.username);
+
+        mEmailView =  findViewById(R.id.email);
         mPasswordView = findViewById(R.id.password);
         mFirstNameView = findViewById(R.id.firstName);
         mLastNameView = findViewById(R.id.lastName);
+        imageView = findViewById(R.id.select_picture_image);
 
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -73,6 +78,17 @@ public class RegistrationActivity extends ToolbarActivity implements Callback<Vo
                 attemptRegistration();
             }
         });
+
+        Button selectPictureButton = findViewById(R.id.select_picture_button);
+        selectPictureButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setFixAspectRatio(true)
+                        .start(RegistrationActivity.this);
+            }
+        });
     }
 
 
@@ -83,11 +99,11 @@ public class RegistrationActivity extends ToolbarActivity implements Callback<Vo
      */
     private void attemptRegistration() {
         // Reset errors.
-        mUsernameView.setError(null);
+        mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
+        String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
         String firstName = mFirstNameView.getText().toString();
         String lastName = mLastNameView.getText().toString();
@@ -115,9 +131,17 @@ public class RegistrationActivity extends ToolbarActivity implements Callback<Vo
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        } else if(!email.substring(email.indexOf('@') + 1).toLowerCase().equals("radford.edu")) {
+            mEmailView.setError(getString(R.string.error_invalid_radford_email));
+            focusView = mEmailView;
             cancel = true;
         }
 
@@ -127,8 +151,8 @@ public class RegistrationActivity extends ToolbarActivity implements Callback<Vo
             focusView.requestFocus();
         } else {
             ClubService service = ClubServiceProvider.getService();
-            RegistrationRequest request = new RegistrationRequest(username, password, firstName, lastName);
-            service.register(request).enqueue(this);
+            RegistrationRequest request = new RegistrationRequest(email, password, firstName, lastName, this.imageUri);
+            service.register(request.getPartMap(), request.getFile()).enqueue(this);
 
         }
     }
@@ -146,6 +170,19 @@ public class RegistrationActivity extends ToolbarActivity implements Callback<Vo
     @Override
     public void onFailure(Call<Void> call, Throwable t) {
         AlertHelper.makeErrorDialog(this, "Failed to register").show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                this.imageUri = result.getUri();
+                Glide.with(this)
+                        .load(imageUri)
+                        .into(imageView);
+            }
+        }
     }
 }
 

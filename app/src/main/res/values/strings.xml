@@ -2,11 +2,11 @@
     <string name="app_name">ClubMobile</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_username">Username</string>
+    <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This username is invalid</string>
+    <string name="error_invalid_email">This email is invalid</string>
     <string name="error_invalid_password">This password is invalid</string>
     <string name="error_invalid_first_name">This first name is invalid</string>
     <string name="error_invalid_last_name">This last name is invalid</string>
@@ -29,4 +29,6 @@
     <string name="my_clubs">My clubs</string>
     <string name="find_club">Find club</string>
     <string name="logout">Logout</string>
+    <string name="or">OR</string>
+    <string name="error_invalid_radford_email">Must use school email (radford.edu)</string>
 </resources>

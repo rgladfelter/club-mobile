@@ -2,11 +2,16 @@ package com.radford.clubmobile;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
+import com.radford.clubmobile.adapters.ViewPagerAdapter;
+import com.radford.clubmobile.fragments.ClubAnnouncementFragment;
+import com.radford.clubmobile.fragments.ClubDetailFragment;
+import com.radford.clubmobile.fragments.ClubTwitterFragment;
 import com.radford.clubmobile.managers.UserManager;
 import com.radford.clubmobile.models.Club;
 import com.radford.clubmobile.networking.ClubService;
@@ -18,7 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ClubActivity extends ToolbarActivity implements Callback<Void> {
-    private Club club;
+    public Club club;
     @Override
     public int layoutId() {
         return R.layout.activity_club;
@@ -33,9 +38,22 @@ public class ClubActivity extends ToolbarActivity implements Callback<Void> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        // Add Fragments to adapter one by one
+        adapter.addFragment(new ClubDetailFragment());
+        adapter.addFragment(new ClubAnnouncementFragment());
+        adapter.addFragment(new ClubTwitterFragment());
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_list);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_announcement);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_twitter);
+
         club = (Club) getIntent().getSerializableExtra("club");
-        TextView clubDescription = findViewById(R.id.club_description);
-        clubDescription.setText(club.getDescription());
     }
 
     @Override

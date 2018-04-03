@@ -17,8 +17,8 @@ public abstract class ToolbarActivity extends AppCompatActivity {
         toolbar.setTitle(title());
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.radford.clubmobile.networking;
 
+import com.radford.clubmobile.Constants;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -9,7 +11,7 @@ public class ClubServiceProvider {
     public static ClubService getService() {
         if (service == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://radford-clubs.herokuapp.com")
+                    .baseUrl(Constants.BaseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 

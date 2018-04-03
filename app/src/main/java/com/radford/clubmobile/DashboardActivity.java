@@ -2,6 +2,7 @@ package com.radford.clubmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -11,6 +12,7 @@ import com.radford.clubmobile.adapters.ClubAdapter;
 import com.radford.clubmobile.delegates.ItemSelector;
 import com.radford.clubmobile.managers.UserManager;
 import com.radford.clubmobile.models.Club;
+import com.radford.clubmobile.models.User;
 import com.radford.clubmobile.networking.ClubService;
 import com.radford.clubmobile.networking.ClubServiceProvider;
 import com.radford.clubmobile.utils.AlertHelper;

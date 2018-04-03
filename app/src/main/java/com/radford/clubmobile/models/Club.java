@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Club implements Serializable {
 
@@ -22,6 +23,9 @@ public class Club implements Serializable {
     @SerializedName("updatedAt")
     @Expose
     private String updatedAt;
+    @SerializedName("tweets")
+    @Expose
+    private List<String> tweets;
 
     public Integer getId() {
         return id;
@@ -63,4 +67,11 @@ public class Club implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public List<String> getTweets() {
+        return tweets;
+    }
+
+    public void setTweets(List<String> tweets) {
+        this.tweets = tweets;
+    }
 }

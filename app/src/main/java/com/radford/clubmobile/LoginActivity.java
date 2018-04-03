@@ -1,11 +1,14 @@
 package com.radford.clubmobile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,7 +35,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity implements Callback<LoginResponse> {
     private static final int REGISTRATION_REQUEST = 1;
     // UI references.
-    private EditText mUsernameView;
+    private EditText mEmailView;
     private EditText mPasswordView;
     private ScrollView mLoginView;
 
@@ -41,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mUsernameView = findViewById(R.id.username);
+        mEmailView = findViewById(R.id.email);
         mPasswordView = findViewById(R.id.password);
         mLoginView = findViewById(R.id.login_form);
 
@@ -72,6 +75,10 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
                 startActivityForResult(intent, REGISTRATION_REQUEST);
             }
         });
+
+//        mUsernameView.setText("clubuser");
+//        mPasswordView.setText("pass");
+//        attemptLogin();
     }
 
 
@@ -82,11 +89,11 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
      */
     private void attemptLogin() {
         // Reset errors.
-        mUsernameView.setError(null);
+        mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
+        String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -100,9 +107,17 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        } else if(!email.substring(email.indexOf('@') + 1).toLowerCase().equals("radford.edu")) {
+            mEmailView.setError(getString(R.string.error_invalid_radford_email));
+            focusView = mEmailView;
             cancel = true;
         }
 
@@ -112,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
             focusView.requestFocus();
         } else {
             ClubService service = ClubServiceProvider.getService();
-            LoginRequest request = new LoginRequest(username, password);
+            LoginRequest request = new LoginRequest(email, password);
             service.login(request).enqueue(this);
 
         }
@@ -128,6 +143,22 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
             startActivity(intent);
 
             finish();
+        } else if(response.code() == 403){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("You must verify your email to sign in.")
+                    .setCancelable(false)
+                    .setPositiveButton("Resend code", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            ClubService service = ClubServiceProvider.getService();
+                            LoginRequest request = new LoginRequest(mEmailView.getText().toString(), mPasswordView.getText().toString());
+                            service.resendEmail(request).enqueue(new ResendCallback());
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    }).create().show();
         } else {
             AlertHelper.makeErrorDialog(this, "Failed to login").show();
         }
@@ -135,7 +166,6 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
 
     @Override
     public void onFailure(Call<LoginResponse> call, Throwable t) {
-
         AlertHelper.makeErrorDialog(this, "Failed to login").show();
     }
 
@@ -145,6 +175,23 @@ public class LoginActivity extends AppCompatActivity implements Callback<LoginRe
             if (resultCode == RESULT_OK) {
                 Snackbar.make(mLoginView, "Account created", Snackbar.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private class ResendCallback implements Callback<Void> {
+
+        @Override
+        public void onResponse(Call<Void> call, Response<Void> response) {
+            if(response.isSuccessful()) {
+                Snackbar.make(mLoginView, "Resent email", Snackbar.LENGTH_LONG).show();
+            } else {
+                AlertHelper.makeErrorDialog(LoginActivity.this, "Failed to resend code").show();
+            }
+        }
+
+        @Override
+        public void onFailure(Call<Void> call, Throwable t) {
+            AlertHelper.makeErrorDialog(LoginActivity.this, "Failed to resend code").show();
         }
     }
 }
