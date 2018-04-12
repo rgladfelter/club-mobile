@@ -1,6 +1,5 @@
 package com.radford.clubmobile.models;
 
-import android.content.Context;
 import android.net.Uri;
 import com.radford.clubmobile.utils.FileUploadUtil;
 

@@ -16,7 +16,7 @@ import android.widget.SearchView;
 
 import java.util.List;
 
-import com.radford.clubmobile.adapters.ClubAdapter;
+import com.radford.clubmobile.adapters.FindClubAdapter;
 import com.radford.clubmobile.delegates.ItemSelector;
 import com.radford.clubmobile.managers.UserManager;
 import com.radford.clubmobile.models.Club;
@@ -30,8 +30,7 @@ import retrofit2.Response;
 
 public class FindClubActivity extends NavigationDrawerActivity implements SearchView.OnQueryTextListener, Callback<List<Club>>,ItemSelector<Club> {
     private RecyclerView clubRecyclerView;
-    private ClubAdapter clubAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private FindClubAdapter clubAdapter;
     private ClubService clubService;
     private Context context;
     private DrawerLayout layout;
@@ -89,8 +88,8 @@ public class FindClubActivity extends NavigationDrawerActivity implements Search
     @Override
     public void onResponse(Call<List<Club>> call, Response<List<Club>> response) {
         if(response.isSuccessful()) {
-            clubAdapter = new ClubAdapter(response.body(), this);
-            layoutManager = new LinearLayoutManager(this);
+            clubAdapter = new FindClubAdapter(response.body(), this, this);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
             clubRecyclerView.setLayoutManager(layoutManager);
             clubRecyclerView.setAdapter(clubAdapter);
@@ -106,25 +105,34 @@ public class FindClubActivity extends NavigationDrawerActivity implements Search
 
     @Override
     public void itemSelected(final Club item) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to join " + item.getName() + "?")
-                .setCancelable(false)
-                .setPositiveButton("Join", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        clubService.joinClub(UserManager.getSessionId(), item.getId()).enqueue(new JoinCallback());
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }).create().show();
+        if(!item.getHasJoined()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to join " + item.getName() + "?")
+                    .setCancelable(false)
+                    .setPositiveButton("Join", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            clubService.joinClub(UserManager.getSessionId(), item.getId()).enqueue(new JoinCallback(item));
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    }).create().show();
+        }
     }
 
     private class JoinCallback implements Callback<Void> {
+        private Club club;
+        JoinCallback(Club club) {
+            this.club = club;
+        }
+
         @Override
         public void onResponse(Call<Void> call, Response<Void> response) {
             if(response.isSuccessful()) {
+                club.setHasJoined(true);
+                clubAdapter.updateClub(club);
                 Snackbar.make(layout, "Joined club", Snackbar.LENGTH_LONG).show();
             } else {
                 AlertHelper.makeErrorDialog(context, "Failed to join club").show();

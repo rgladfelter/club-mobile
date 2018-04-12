@@ -6,80 +6,48 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.RingtoneManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+import android.support.v4.app.NotificationManagerCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Map;
-
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    public static final String FCM_PARAM = "picture";
-    private static final String CHANNEL_NAME = "FCM";
-    private static final String CHANNEL_DESC = "Firebase Cloud Messaging";
-    private int numMessages = 0;
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
-        RemoteMessage.Notification notification = remoteMessage.getNotification();
-        Map<String, String> data = remoteMessage.getData();
-        Log.d("FROM", remoteMessage.getFrom());
-        sendNotification(notification, data);
+        initChannels();
+        Intent intent = new Intent(this, NotificationBroadcastReceiver.class);
+        intent.putExtra("clubId", remoteMessage.getData().get("clubId"));
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getString(R.string.default_channel))
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(remoteMessage.getData().get("title"))
+                .setContentText(remoteMessage.getData().get("body"))
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setContentIntent(pendingIntent)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(123, builder.build());
     }
 
-    private void sendNotification(RemoteMessage.Notification notification, Map<String, String> data) {
-        Bundle bundle = new Bundle();
-        bundle.putString(FCM_PARAM, data.get(FCM_PARAM));
-
-        Intent intent = new Intent(this, RegistrationActivity.class);
-        intent.putExtras(bundle);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "default")
-                .setContentTitle(notification.getTitle())
-                .setContentText(notification.getBody())
-                .setAutoCancel(true)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                //.setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.win))
-                .setContentIntent(pendingIntent)
-                .setContentInfo("Hello")
-                .setColor(getColor(R.color.colorAccent))
-                .setLights(Color.RED, 1000, 300)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setNumber(++numMessages)
-                .setSmallIcon(R.drawable.ic_menu_gallery);
-
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    "default", CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
-            );
-            channel.setDescription(CHANNEL_DESC);
-            channel.setShowBadge(true);
-            channel.canShowBadge();
-            channel.enableLights(true);
-            channel.setLightColor(Color.RED);
-            channel.enableVibration(true);
-            channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500});
+    private void initChannels() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String name = getString(R.string.default_channel);
+            String description = getString(R.string.default_channel);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(name, name, importance);
+            mChannel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = (NotificationManager) getSystemService(
+                    Context.NOTIFICATION_SERVICE);
 
             assert notificationManager != null;
-            notificationManager.createNotificationChannel(channel);
+            notificationManager.createNotificationChannel(mChannel);
         }
-
-        assert notificationManager != null;
-        notificationManager.notify(0, notificationBuilder.build());
     }
 }

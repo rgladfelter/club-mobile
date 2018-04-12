@@ -1,6 +1,5 @@
 package com.radford.clubmobile.utils;
 
-import android.content.Context;
 import android.net.Uri;
 
 import java.io.File;

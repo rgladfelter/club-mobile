@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/app_bar"
+        android:padding="20dp">
+        <EditText
+            android:id="@+id/announcement_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/title"/>
+        <EditText
+            android:id="@+id/announcement_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/description"
+            android:gravity="start|top"
+            android:lines="10"/>
+        <Button
+            android:id="@+id/sendAnnouncementButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_announcement"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -3,10 +3,12 @@ package com.radford.clubmobile.networking;
 import java.util.List;
 import java.util.Map;
 
+import com.radford.clubmobile.models.Announcement;
 import com.radford.clubmobile.models.Club;
+import com.radford.clubmobile.models.Event;
 import com.radford.clubmobile.models.LoginRequest;
 import com.radford.clubmobile.models.LoginResponse;
-import com.radford.clubmobile.models.RegistrationRequest;
+import com.radford.clubmobile.models.User;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -40,12 +42,24 @@ public interface ClubService {
     @GET("clubs/all")
     Call<List<Club>> getAllClubs(@Header("x-session-id") String sessionId);
 
-    @PUT("clubs/join/{id}")
+    @GET("events/by_club/{id}")
+    Call<List<Event>> getEventsByClub(@Header("x-session-id") String sessionId, @Path("id") int clubId);
+
+    @PUT("clubs/{id}/join")
     Call<Void> joinClub(@Header("x-session-id") String sessionId, @Path("id") int clubId);
 
-    @DELETE("clubs/leave/{id}")
+    @DELETE("clubs/{id}/leave")
     Call<Void> leaveClub(@Header("x-session-id") String sessionId, @Path("id") int clubId);
 
     @POST("register/resend")
-    Call<Void> resendEmail(@Body LoginRequest egistrationRequest);
+    Call<Void> resendEmail(@Body LoginRequest registrationRequest);
+
+    @GET("announcements/by_club/{id}")
+    Call<List<Announcement>> getAnnouncementsByClub(@Header("x-session-id") String sessionId, @Path("id") int clubId);
+
+    @POST("announcements")
+    Call<Announcement> createAnnouncement(@Header("x-session-id") String sessionId, @Body Announcement announcement);
+
+    @PUT("users")
+    Call<Void> updateUser(@Header("x-session-id") String sessionId, @Body User user);
 }

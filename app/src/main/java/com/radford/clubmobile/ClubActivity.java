@@ -1,7 +1,9 @@
 package com.radford.clubmobile;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 
 import com.radford.clubmobile.adapters.ViewPagerAdapter;
 import com.radford.clubmobile.fragments.ClubAnnouncementFragment;
+import com.radford.clubmobile.fragments.ClubCalendarFragment;
 import com.radford.clubmobile.fragments.ClubDetailFragment;
 import com.radford.clubmobile.fragments.ClubTwitterFragment;
 import com.radford.clubmobile.managers.UserManager;
@@ -44,6 +47,7 @@ public class ClubActivity extends ToolbarActivity implements Callback<Void> {
         // Add Fragments to adapter one by one
         adapter.addFragment(new ClubDetailFragment());
         adapter.addFragment(new ClubAnnouncementFragment());
+        adapter.addFragment(new ClubCalendarFragment());
         adapter.addFragment(new ClubTwitterFragment());
         viewPager.setAdapter(adapter);
 
@@ -51,7 +55,14 @@ public class ClubActivity extends ToolbarActivity implements Callback<Void> {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_list);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_announcement);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_twitter);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_calendar);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_twitter);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(sharedPreferences.getBoolean("OPENING_PUSH", false)) {
+            viewPager.setCurrentItem(1);
+            sharedPreferences.edit().putBoolean("OPENING_PUSH", false).putInt("CLUB_ID", -1).apply();
+        }
 
         club = (Club) getIntent().getSerializableExtra("club");
     }

@@ -31,4 +31,9 @@
     <string name="logout">Logout</string>
     <string name="or">OR</string>
     <string name="error_invalid_radford_email">Must use school email (radford.edu)</string>
+    <string name="hyphen">-</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
+    <string name="create_announcement">Create announcement</string>
+    <string name="default_channel">default</string>
 </resources>

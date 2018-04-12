@@ -31,10 +31,13 @@
                 android:id="@+id/email_login_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:orientation="vertical"
                 android:padding="36dp">
-
+                <ImageView
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/ic_logo"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -42,7 +45,8 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
-                    android:textSize="40sp" />
+                    android:textSize="40sp"
+                    android:layout_marginTop="-25dp"/>
 
                 <EditText
                     android:id="@+id/email"

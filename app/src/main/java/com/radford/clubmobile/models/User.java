@@ -3,7 +3,9 @@ package com.radford.clubmobile.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     @SerializedName("email")
     @Expose
@@ -17,6 +19,9 @@ public class User {
     @SerializedName("avatarUrl")
     @Expose
     private String avatarUrl;
+    @SerializedName("pushToken")
+    @Expose
+    private String pushToken;
 
     public String getFirstName() {
         return firstName;
@@ -48,5 +53,13 @@ public class User {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public String getPushToken() {
+        return pushToken;
+    }
+
+    public void setPushToken(String pushToken) {
+        this.pushToken = pushToken;
     }
 }

@@ -4,9 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 
-public class Club implements Serializable {
+public class Announcement implements Serializable {
 
     @SerializedName("id")
     @Expose
@@ -19,20 +19,19 @@ public class Club implements Serializable {
     private String description;
     @SerializedName("createdAt")
     @Expose
-    private String createdAt;
+    private Date createdAt;
     @SerializedName("updatedAt")
     @Expose
     private String updatedAt;
-    @SerializedName("tweets")
+    @SerializedName("userId")
     @Expose
-    private List<String> tweets;
-    @SerializedName("hasJoined")
+    private Integer userId;
+    @SerializedName("clubId")
     @Expose
-    private Boolean hasJoined;
-    @SerializedName("avatarUrl")
+    private Integer clubId;
+    @SerializedName("user")
     @Expose
-    private String avatarUrl;
-
+    private User user;
 
     public Integer getId() {
         return id;
@@ -58,11 +57,11 @@ public class Club implements Serializable {
         this.description = description;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -74,27 +73,28 @@ public class Club implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<String> getTweets() {
-        return tweets;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setTweets(List<String> tweets) {
-        this.tweets = tweets;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Boolean getHasJoined() {
-        return hasJoined;
+    public Integer getClubId() {
+        return clubId;
     }
 
-    public void setHasJoined(Boolean hasJoined) {
-        this.hasJoined = hasJoined;
+    public void setClubId(Integer clubId) {
+        this.clubId = clubId;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public User getUser() {
+        return user;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setUser(User user) {
+        this.user = user;
     }
+
 }

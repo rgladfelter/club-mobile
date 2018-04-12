@@ -4,9 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 
-public class Club implements Serializable {
+public class Event implements Serializable{
 
     @SerializedName("id")
     @Expose
@@ -17,22 +17,24 @@ public class Club implements Serializable {
     @SerializedName("description")
     @Expose
     private String description;
+    @SerializedName("startTime")
+    @Expose
+    private Date startTime;
+    @SerializedName("endTime")
+    @Expose
+    private Date endTime;
     @SerializedName("createdAt")
     @Expose
     private String createdAt;
+    @SerializedName("location")
+    @Expose
+    private String location;
     @SerializedName("updatedAt")
     @Expose
     private String updatedAt;
-    @SerializedName("tweets")
+    @SerializedName("clubId")
     @Expose
-    private List<String> tweets;
-    @SerializedName("hasJoined")
-    @Expose
-    private Boolean hasJoined;
-    @SerializedName("avatarUrl")
-    @Expose
-    private String avatarUrl;
-
+    private Integer clubId;
 
     public Integer getId() {
         return id;
@@ -58,6 +60,14 @@ public class Club implements Serializable {
         this.description = description;
     }
 
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -74,27 +84,27 @@ public class Club implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<String> getTweets() {
-        return tweets;
+    public Integer getClubId() {
+        return clubId;
     }
 
-    public void setTweets(List<String> tweets) {
-        this.tweets = tweets;
+    public void setClubId(Integer clubId) {
+        this.clubId = clubId;
     }
 
-    public Boolean getHasJoined() {
-        return hasJoined;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setHasJoined(Boolean hasJoined) {
-        this.hasJoined = hasJoined;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getLocation() {
+        return location;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

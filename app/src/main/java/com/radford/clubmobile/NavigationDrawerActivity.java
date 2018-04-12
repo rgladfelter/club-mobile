@@ -54,7 +54,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
             if(user.getAvatarUrl() != null) {
                 ImageView navImage = view.findViewById(R.id.nav_image);
                 Glide.with(this)
-                        .load(Uri.parse(Constants.BaseUrl + "/static/images/" + user.getAvatarUrl()))
+                        .load(Uri.parse(Constants.BaseImageUrl + user.getAvatarUrl()))
                         .apply(RequestOptions.circleCropTransform())
                         .into(navImage);
             }

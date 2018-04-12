@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardBackgroundColor="@color/cardview_light_background"
+    app:cardUseCompatPadding="true"
+    android:layout_marginBottom="0dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    app:cardElevation="2dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"/>
+        <TextView
+            android:id="@+id/announcement_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            tools:text="Announcement name"
+            android:layout_toEndOf="@+id/userImage"
+            android:textColor="#2e2e2e"/>
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            tools:text="Announcement name"
+            android:layout_toEndOf="@+id/userImage"
+            android:layout_below="@+id/announcement_name"
+            android:textColor="#2e2e2e"/>
+        <TextView
+            android:id="@+id/announcement_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            tools:text="Announcement description"
+            android:layout_toEndOf="@+id/userImage"
+            android:layout_below="@+id/user_name"
+            android:textColor="#2e2e2e"
+            android:layout_marginTop="5dp"/>
+        <TextView
+            android:id="@+id/announcement_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"
+            tools:text="Seconds ago"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/announcement_description"
+            android:textColor="#2e2e2e"
+            android:layout_marginTop="5dp"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
